@@ -1,0 +1,8 @@
+<h2>Products</h2>
+<section class="entityList">
+    <div class="entity" *ngFor="let product of products">
+        <p><b>Product Name: </b>{{ product.name }}</p>
+        <p><b>Price: </b>{{ product.price }}</p>
+        <a routerLink="/products/{{product.id}}">Details</a>
+    </div>
+</section>

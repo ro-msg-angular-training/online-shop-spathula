@@ -1,0 +1,10 @@
+<div *ngIf="product">
+    <h2>Product: {{ product.name }}</h2>
+    <p><b>Category: </b> {{ product.category }}</p>
+    <p><b>Price: </b> {{ product.price }} RON</p>
+    <p><b>Description: </b> {{ product.description }}</p>
+</div>
+
+<div *ngIf="!product">
+    <p>Not available</p>
+</div>
