@@ -3,6 +3,8 @@
     <p><b>Category: </b> {{ product.category }}</p>
     <p><b>Price: </b> {{ product.price }} RON</p>
     <p><b>Description: </b> {{ product.description }}</p>
+    <button (click)="addToCart()">Add</button>
+    <button (click)="deleteProduct()">Delete</button>
 </div>
 
 <div *ngIf="!product">

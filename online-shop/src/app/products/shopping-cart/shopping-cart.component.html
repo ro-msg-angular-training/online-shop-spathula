@@ -1,0 +1,9 @@
+<h2>Shopping Cart</h2>
+<section class="entityList">
+    <div class="entity" *ngFor="let item of cart">
+        <p><b>Product Name: </b>{{ item.name }}</p>
+        <p><b>Price: </b>{{ item.price }}</p>
+        <p><b>Quantity: </b>{{ item.quantity }}</p>
+    </div>
+    <button (click)="checkOut()">Checkout</button>
+</section>
