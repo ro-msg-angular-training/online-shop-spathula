@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { OrderService } from '../shared/order.service';
 import { CartItem } from '../shared/cart-item.model';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -8,14 +10,26 @@ import { CartItem } from '../shared/cart-item.model';
   styleUrls: ['./shopping-cart.component.scss']
 })
 export class ShoppingCartComponent implements OnInit {
-  cart: CartItem[] = [];
+  displayedColumns: string[] = ['category', 'productName', 'price', 'quantity', 'remove']
+  dataSource = new MatTableDataSource<CartItem>([]);
 
   constructor(
-    private service : OrderService
+    private service : OrderService,
+    private location: Location
   ) { }
 
+  get emptyCart() { 
+    return this.dataSource.data.length === 0; 
+  }
+
   ngOnInit(): void {
-    this.service.getShoppingCart().subscribe(cart => this.cart = cart);
+    this.getCart();
+  }
+
+  getCart() {
+    this.service.getShoppingCart().subscribe(cart => {
+      this.dataSource.data = cart;
+    });
   }
 
   checkOut(): void {
@@ -23,8 +37,15 @@ export class ShoppingCartComponent implements OnInit {
       data => {
         alert("Order has been placed succesfully");
         this.service.clearShoppingCart();
+        this.location.back();
       },
       error => alert(error));
+  }
+
+  removeFromCart(id: number): void {
+    this.service.removeFromCart(id).subscribe(cart => {
+      this.dataSource.data = cart;
+    });;
   }
 
 }

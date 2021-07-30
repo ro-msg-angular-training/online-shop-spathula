@@ -1,0 +1,15 @@
+<div class="container">
+    <form class="custom-form" [formGroup]="loginForm" (ngSubmit)="processLogin()">
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input formControlName="username" required matInput>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input type="password" formControlName="password" required matInput>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="primary" [disabled]="!loginForm.valid">Log In</button>
+    </form>
+</div>

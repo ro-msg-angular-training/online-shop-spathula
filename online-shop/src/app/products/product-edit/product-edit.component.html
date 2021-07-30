@@ -1,0 +1,36 @@
+<div class="head">
+    <h2>Edit: {{ product.name }}</h2>
+</div>
+<div class="container">
+    <form class="custom-form" [formGroup]="productForm" (ngSubmit)="editProduct()">
+        <mat-form-field appearance="outline">
+            <mat-label>Product Name</mat-label>
+            <input matInput formControlName="name" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <input matInput formControlName="category" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Image Link</mat-label>
+            <input matInput formControlName="image">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input type="number" matInput formControlName="price" required min=1>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <footer>
+            <button mat-raised-button color="warn" type="button" (click)="cancelEdit()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!productForm.valid">Save</button>
+        </footer>
+    </form>
+</div>

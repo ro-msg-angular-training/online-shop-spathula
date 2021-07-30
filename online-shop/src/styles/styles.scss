@@ -1,20 +1,55 @@
-.entityList {
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+
+    table { 
+        width: 50%; 
+        margin-bottom: 50px;
+    }
 }
 
-.entity {
+.custom-form {
     border: 1px solid #c6c6c6;
     border-radius: 3px;
     padding: 16px;
     margin: 16px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     text-align: center;
+    width: 100%;
+    max-width: 300px;
 
-    p {
-        margin-right: 64px;
+    footer {
+        float: right;
+
+        button {
+            margin-left: 30px;
+        }
+    }
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+
+    button {
+        margin-left: 30px;
+    }
+
+    a {
+        margin-left: 30px;
     }
 }

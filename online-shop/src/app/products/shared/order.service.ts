@@ -9,7 +9,6 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class OrderService {
-
   private shoppingCart: CartItem[] = [];
 
   private orderUrl = 'http://localhost:3000/orders';
@@ -20,10 +19,24 @@ export class OrderService {
     let item = this.shoppingCart.find(item => item.productId === product.id);
 
     if (item === undefined) {
-      this.shoppingCart.push(new CartItem(product.id, product.name, product.price, 1));
+      this.shoppingCart.push(new CartItem(product.id, product.name, product.price, product.category, 1));
     } else {
       item.quantity += 1;
     }
+  }
+
+  removeFromCart(id: number): Observable<CartItem[]> {
+    let item = this.shoppingCart.find(item => item.productId === id);
+
+    if(item === undefined) return of(this.shoppingCart);
+
+    if(item.quantity === 1) {
+      this.shoppingCart.splice(this.shoppingCart.indexOf(item), 1);
+    } else {
+      item.quantity--;
+    }
+
+    return of(this.shoppingCart);
   }
 
   getShoppingCart(): Observable<CartItem[]> {

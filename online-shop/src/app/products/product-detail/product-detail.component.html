@@ -1,12 +1,24 @@
 <div *ngIf="product">
-    <h2>Product: {{ product.name }}</h2>
-    <p><b>Category: </b> {{ product.category }}</p>
-    <p><b>Price: </b> {{ product.price }} RON</p>
-    <p><b>Description: </b> {{ product.description }}</p>
-    <button (click)="addToCart()">Add</button>
-    <button (click)="deleteProduct()">Delete</button>
+    <header class="head">
+        <h2>Product: {{ product.name }}</h2>
+        <div>
+            <a mat-raised-button color="primary" routerLink="/products">Back</a>
+            <button mat-raised-button color="primary" (click)="addToCart()" *ngIf="isCustomer">Add</button>
+            <a mat-raised-button color="primary" routerLink="/products/edit/{{product.id}}" *ngIf="isAdmin">Edit</a>
+            <button mat-raised-button color="warn" (click)="deleteProduct()" *ngIf="isAdmin">Delete</button>
+        </div>
+    </header>
+    <div class="head">
+        <div>
+            <p><b>Category: </b> {{ product.category }}</p>
+            <p><b>Price: </b> {{ product.price }} €</p>
+            <p><b>Description: </b> {{ product.description }}</p>
+        </div>
+        <img [src]="product.image">
+    </div>
+
 </div>
 
 <div *ngIf="!product">
-    <p>Not available</p>
+    <h2>Not Available! <a routerLink="/products">Go Back</a></h2>
 </div>

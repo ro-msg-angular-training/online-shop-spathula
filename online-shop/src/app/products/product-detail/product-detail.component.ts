@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Product } from '../shared/product';
 import { ProductService } from '../shared/product.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -15,6 +16,7 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private service: ProductService,
+    private authService: AuthService,
     private location: Location
   ) { }
 
@@ -35,6 +37,14 @@ export class ProductDetailComponent implements OnInit {
     this.location.back();
   }
 
+  get isAdmin() {
+    return this.authService.getCurrentUser.roles.includes("admin");
+  }
+
+  get isCustomer() {
+    return this.authService.getCurrentUser.roles.includes("customer");
+  }
+
   deleteProduct(): void {
     if(confirm("Are you sure you want to delete this product?")) {
       this.service.deleteProduct(this.product.id).subscribe();
@@ -42,5 +52,4 @@ export class ProductDetailComponent implements OnInit {
       this.location.back();
     }
   }
-
 }

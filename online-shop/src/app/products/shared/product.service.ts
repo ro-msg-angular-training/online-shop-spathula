@@ -9,7 +9,6 @@ import { OrderService } from './order.service';
   providedIn: 'root'
 })
 export class ProductService {
-
   private productsUrl = 'http://localhost:3000/products'
 
   constructor(
@@ -33,6 +32,16 @@ export class ProductService {
 
   deleteProduct(id: number) {
     return this.httpClient.delete(`${this.productsUrl}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  editProduct(id: number, product: Product) {
+    return this.httpClient.put(`${this.productsUrl}/${id}`, product)
+      .pipe(catchError(this.handleError));
+  }
+
+  addProduct(product: Product) {
+    return this.httpClient.post(this.productsUrl, product)
       .pipe(catchError(this.handleError));
   }
 
