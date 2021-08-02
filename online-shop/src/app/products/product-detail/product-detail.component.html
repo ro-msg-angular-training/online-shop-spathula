@@ -1,9 +1,9 @@
-<div *ngIf="product">
+<div *ngIf="product$ | async as product">
     <header class="head">
         <h2>Product: {{ product.name }}</h2>
         <div>
             <a mat-raised-button color="primary" routerLink="/products">Back</a>
-            <button mat-raised-button color="primary" (click)="addToCart()" *ngIf="isCustomer">Add</button>
+            <!-- <button mat-raised-button color="primary" (click)="addToCart()" *ngIf="isCustomer">Add</button> -->
             <a mat-raised-button color="primary" routerLink="/products/edit/{{product.id}}" *ngIf="isAdmin">Edit</a>
             <button mat-raised-button color="warn" (click)="deleteProduct()" *ngIf="isAdmin">Delete</button>
         </div>
@@ -19,6 +19,6 @@
 
 </div>
 
-<div *ngIf="!product">
+<div *ngIf="!product$">
     <h2>Not Available! <a routerLink="/products">Go Back</a></h2>
 </div>

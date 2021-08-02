@@ -2,8 +2,12 @@ import { Component, enableProdMode, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Product } from '../shared/product';
-import { ProductService } from '../shared/product.service';
 import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/state/app.state';
+import { EditProduct, GetProduct } from 'src/app/store/actions/product.actions';
+import { selectSelectedProduct } from 'src/app/store/selectors/product.selectors';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-edit',
@@ -11,41 +15,35 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./product-edit.component.scss']
 })
 export class ProductEditComponent implements OnInit {
-  product!: Product;
+  product$ = this.store.pipe(select(selectSelectedProduct));
 
-  productForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    category: ['', Validators.required],
-    image: [''],
-    price: ['', [Validators.required, Validators.min(1)]],
-    description: ['', [Validators.required, Validators.minLength(10)]]
-  });
+  productForm = this.product$.pipe(map(product => this.formBuilder.group({
+    id: [product?.id],
+    name: [product?.name, Validators.required],
+    category: [product?.category, Validators.required],
+    image: [product?.image],
+    price: [product?.price, [Validators.required, Validators.min(1)]],
+    description: [product?.description, [Validators.required, Validators.minLength(10)]]
+  })));
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private service: ProductService,
+    private store: Store<AppState>,
     private location: Location
     ) { }
 
   ngOnInit(): void {
-    this.getProduct();
-  }
-
-  getProduct(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.service.getProduct(id).subscribe(product => { 
-      this.product = product;
-      this.productForm.patchValue(this.product);
-    });
+    this.store.dispatch(new GetProduct(id));
+
+    
   }
   
-  editProduct(): void {
+  editProduct(product: Product): void {
     if(confirm("Save the changes made to this product?")) {
-      this.service.editProduct(this.product.id, this.productForm.value).subscribe();
-      alert("Changes have been saved");
-      this.location.back();
+      this.store.dispatch(new EditProduct(product));
     }
   }
 

@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ProductService } from '../shared/product.service';
+import { Product } from '../shared/product';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/state/app.state';
+import { AddProduct } from 'src/app/store/actions/product.actions';
 
 @Component({
   selector: 'app-product-add',
@@ -19,18 +23,16 @@ export class ProductAddComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private service: ProductService,
+    private store: Store<AppState>,
     private location: Location
   ) { }
 
   ngOnInit(): void {
   }
 
-  addProduct(): void {
+  addProduct(product: Product): void {
     if(confirm("Save this product?")) {
-      this.service.addProduct(this.productForm.value).subscribe();
-      alert("Product has been saved");
-      this.location.back();
+      this.store.dispatch(new AddProduct(product));
     }
   }
 

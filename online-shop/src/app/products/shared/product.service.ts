@@ -12,8 +12,7 @@ export class ProductService {
   private productsUrl = 'http://localhost:3000/products'
 
   constructor(
-    private httpClient: HttpClient,
-    private orderService: OrderService
+    private httpClient: HttpClient
     ) { }
 
   getProducts(): Observable<Product[]> {
@@ -26,8 +25,9 @@ export class ProductService {
       .pipe(catchError(this.handleError));
   }
 
-  addToCart(product: Product): void {
-    this.orderService.addToCart(product);
+  addProduct(product: Product): Observable<Product> {
+    return this.httpClient.post<Product>(this.productsUrl, product)
+      .pipe(catchError(this.handleError));
   }
 
   deleteProduct(id: number) {
@@ -35,13 +35,8 @@ export class ProductService {
       .pipe(catchError(this.handleError));
   }
 
-  editProduct(id: number, product: Product) {
-    return this.httpClient.put(`${this.productsUrl}/${id}`, product)
-      .pipe(catchError(this.handleError));
-  }
-
-  addProduct(product: Product) {
-    return this.httpClient.post(this.productsUrl, product)
+  editProduct(product: Product) {
+    return this.httpClient.put(`${this.productsUrl}/${product.id}`, product)
       .pipe(catchError(this.handleError));
   }
 

@@ -9,58 +9,12 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class OrderService {
-  private shoppingCart: CartItem[] = [];
-
   private orderUrl = 'http://localhost:3000/orders';
 
   constructor(private httpClient: HttpClient) { }
 
-  addToCart(product: Product) {
-    let item = this.shoppingCart.find(item => item.productId === product.id);
-
-    if (item === undefined) {
-      this.shoppingCart.push(new CartItem(product.id, product.name, product.price, product.category, 1));
-    } else {
-      item.quantity += 1;
-    }
-  }
-
-  removeFromCart(id: number): Observable<CartItem[]> {
-    let item = this.shoppingCart.find(item => item.productId === id);
-
-    if(item === undefined) return of(this.shoppingCart);
-
-    if(item.quantity === 1) {
-      this.shoppingCart.splice(this.shoppingCart.indexOf(item), 1);
-    } else {
-      item.quantity--;
-    }
-
-    return of(this.shoppingCart);
-  }
-
-  getShoppingCart(): Observable<CartItem[]> {
-    return of(this.shoppingCart);
-  }
-
-  placeOrder() {
-    let products = [...this.shoppingCart];
+  placeOrder(products: CartItem[]) {
     let customer = "doej";
-    return this.httpClient.post(this.orderUrl, { customer, products }, { responseType: 'text' })
-      .pipe(catchError(this.handleError));;
-  }
-
-  clearShoppingCart() {
-    this.shoppingCart.length = 0;
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('An error occured: ', error.error);
-    } else {
-      console.error(`Backend returned code ${error.status}: `, error.error);
-    }
-
-    return throwError('An error orccured, please try again later.');
+    return this.httpClient.post(this.orderUrl, { customer, products }, { responseType: 'text' });
   }
 }

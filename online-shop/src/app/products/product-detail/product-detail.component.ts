@@ -4,6 +4,10 @@ import { Location } from '@angular/common';
 import { Product } from '../shared/product';
 import { ProductService } from '../shared/product.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { AppState } from 'src/app/store/state/app.state';
+import { select, Store } from '@ngrx/store';
+import { DeleteProduct, GetProduct } from 'src/app/store/actions/product.actions';
+import { selectSelectedProduct } from 'src/app/store/selectors/product.selectors';
 
 @Component({
   selector: 'app-product-detail',
@@ -11,9 +15,11 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
-  product!: Product;
+  product$ = this.store.pipe(select(selectSelectedProduct));
+  id: number = 0;
 
   constructor(
+    private store: Store<AppState>,
     private route: ActivatedRoute,
     private service: ProductService,
     private authService: AuthService,
@@ -21,21 +27,17 @@ export class ProductDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getProduct();
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.store.dispatch(new GetProduct(this.id));
   }
 
-  getProduct(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+  // addToCart(): void {
+  //   this.service.addToCart(this.product$.);
 
-    this.service.getProduct(id).subscribe(product => this.product = product);
-  }
-
-  addToCart(): void {
-    this.service.addToCart(this.product);
-
-    alert("Product has been added to the cart.");
-    this.location.back();
-  }
+  //   alert("Product has been added to the cart.");
+  //   this.location.back();
+  // }
 
   get isAdmin() {
     return this.authService.getCurrentUser.roles.includes("admin");
@@ -47,9 +49,7 @@ export class ProductDetailComponent implements OnInit {
 
   deleteProduct(): void {
     if(confirm("Are you sure you want to delete this product?")) {
-      this.service.deleteProduct(this.product.id).subscribe();
-      alert("Product has been deleted.");
-      this.location.back();
+      this.store.dispatch(new DeleteProduct(this.id));
     }
   }
 }

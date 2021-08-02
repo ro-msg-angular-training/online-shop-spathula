@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Product } from '../shared/product';
-import { ProductService } from '../shared/product.service';
+import { GetProducts } from 'src/app/store/actions/product.actions';
+import { selectProductList } from 'src/app/store/selectors/product.selectors';
+import { AppState } from 'src/app/store/state/app.state';
 
 @Component({
   selector: 'app-product-list',
@@ -10,15 +12,15 @@ import { ProductService } from '../shared/product.service';
 })
 export class ProductListComponent implements OnInit {
   displayedColumns: string[] = ['category', 'productName', 'price', 'details']
-  products: Product[] = [];
+  products$ = this.store.pipe(select(selectProductList));
 
   constructor(
-    private service : ProductService,
+    private store : Store<AppState>,
     private authService : AuthService
   ) { }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.store.dispatch(new GetProducts());
   }
 
   get isAdmin() {
@@ -28,9 +30,4 @@ export class ProductListComponent implements OnInit {
   get isCustomer() {
     return this.authService.getCurrentUser.roles.includes("customer");
   }
-
-  getProducts(): void {
-    this.service.getProducts().subscribe(products => this.products = products);
-  }
-
 }

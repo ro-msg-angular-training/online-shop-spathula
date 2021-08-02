@@ -17,6 +17,14 @@ import { ProductEditComponent } from './products/product-edit/product-edit.compo
 import { ProductAddComponent } from './products/product-add/product-add.component';
 import { LoginComponent } from './auth/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { appReducers } from './store/actions/app.reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { ProductEffects } from './store/effects/product.effects';
+import { environment } from 'src/environments/environment';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ProductInputFormComponent } from './products/product-input-form/product-input-form.component';
+import { ShoppingCartEffects } from './store/effects/shopping-cart.effects';
 
 @NgModule({
   declarations: [
@@ -26,13 +34,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ShoppingCartComponent,
     ProductEditComponent,
     ProductAddComponent,
-    LoginComponent
+    LoginComponent,
+    ProductInputFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot([ProductEffects, ShoppingCartEffects]),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     MatInputModule,
     MatFormFieldModule,
