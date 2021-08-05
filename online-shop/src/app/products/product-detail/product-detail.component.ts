@@ -8,6 +8,7 @@ import { AppState } from 'src/app/store/state/app.state';
 import { select, Store } from '@ngrx/store';
 import { DeleteProduct, GetProduct } from 'src/app/store/actions/product.actions';
 import { selectSelectedProduct } from 'src/app/store/selectors/product.selectors';
+import { AddCartItem } from 'src/app/store/actions/shopping-cart.actions';
 
 @Component({
   selector: 'app-product-detail',
@@ -32,12 +33,9 @@ export class ProductDetailComponent implements OnInit {
     this.store.dispatch(new GetProduct(this.id));
   }
 
-  // addToCart(): void {
-  //   this.service.addToCart(this.product$.);
-
-  //   alert("Product has been added to the cart.");
-  //   this.location.back();
-  // }
+  addToCart(product: Product): void {
+    this.store.dispatch(new AddCartItem(product));
+  }
 
   get isAdmin() {
     return this.authService.getCurrentUser.roles.includes("admin");

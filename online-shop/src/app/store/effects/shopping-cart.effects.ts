@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { catchError, map, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { OrderService } from "src/app/products/shared/order.service";
 import { AddProductSuccess } from "../actions/product.actions";
-import { AddCartItem, PlaceOrder, PlaceOrderError, PlaceOrderSuccess, RemoveCartItem, RemoveCartItemSuccess, ShoppingCartActionTypes } from "../actions/shopping-cart.actions";
+import { AddCartItem, AddCartItemSuccess, PlaceOrder, PlaceOrderError, PlaceOrderSuccess, RemoveCartItem, RemoveCartItemSuccess, ShoppingCartActionTypes } from "../actions/shopping-cart.actions";
 import { selectCartItems } from "../selectors/shopping-cart.selectors";
 import { AppState } from "../state/app.state";
 import { Location } from "@angular/common";
@@ -22,7 +22,9 @@ export class ShoppingCartEffects {
     addCartItem$ = createEffect(() => {
         return this._actions$.pipe(
             ofType<AddCartItem>(ShoppingCartActionTypes.AddCartItem),
-            switchMap(action => of(new AddProductSuccess(action.payload)))
+            map(action => action.payload),
+            tap(() => this._location.back()),
+            switchMap(product => of(new AddCartItemSuccess(product)))
         )
     });
 

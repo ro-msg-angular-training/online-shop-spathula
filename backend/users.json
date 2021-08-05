@@ -1,7 +1,7 @@
 {
     "doej": {
         "username": "doej",
-        "password": "password",
+        "password": "pass",
         "fullName": "John Doe",
         "roles": ["user", "customer"]
     },

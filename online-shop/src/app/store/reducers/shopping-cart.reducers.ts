@@ -16,12 +16,12 @@ export const shoppingCartReducers = (
             } 
             else return {
                 ...state,
-                items: state.items.map(item => item.productId === action.payload.id ? { ...item, quantity: item.quantity++ } : item)
+                items: state.items.map(item => item.productId === action.payload.id ? { ...item, quantity: ++item.quantity } : item)
             }
         }
 
         case ShoppingCartActionTypes.RemoveCartItemSuccess: {
-            const items = state.items.map(item => item.productId === action.payload ? { ...item, quantity: item.quantity-- } : item)
+            const items = state.items.map(item => item.productId === action.payload ? { ...item, quantity: --item.quantity } : item)
 
             return {
                 ...state,

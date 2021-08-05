@@ -2,11 +2,11 @@
     <h2>Shopping Cart</h2>
     <div>
         <a mat-raised-button color="primary" routerLink="/products">Back</a>
-        <button mat-raised-button color="primary" (click)="checkOut()" [disabled]="emptyCart">Checkout</button>
+        <button mat-raised-button color="primary" (click)="checkOut()">Checkout</button>
     </div>
 </header>
 <section class="container">
-    <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table #table [dataSource]="cart$" class="mat-elevation-z8">
         <ng-container matColumnDef="category">
             <th mat-header-cell *matHeaderCellDef>Category</th>
             <td mat-cell *matCellDef="let item">{{ item.category }}</td>

@@ -3,7 +3,7 @@
         <h2>Product: {{ product.name }}</h2>
         <div>
             <a mat-raised-button color="primary" routerLink="/products">Back</a>
-            <!-- <button mat-raised-button color="primary" (click)="addToCart()" *ngIf="isCustomer">Add</button> -->
+            <button mat-raised-button color="primary" (click)="addToCart(product)" *ngIf="isCustomer">Add</button>
             <a mat-raised-button color="primary" routerLink="/products/edit/{{product.id}}" *ngIf="isAdmin">Edit</a>
             <button mat-raised-button color="warn" (click)="deleteProduct()" *ngIf="isAdmin">Delete</button>
         </div>

@@ -15,7 +15,6 @@ import { PlaceOrder, RemoveCartItem } from 'src/app/store/actions/shopping-cart.
 })
 export class ShoppingCartComponent implements OnInit {
   displayedColumns: string[] = ['category', 'productName', 'price', 'quantity', 'remove']
-  dataSource = new MatTableDataSource<CartItem>([]);
   cart$ = this.store.pipe(select(selectCartItems));
 
   constructor(
@@ -23,12 +22,7 @@ export class ShoppingCartComponent implements OnInit {
     private location: Location
   ) { }
 
-  get emptyCart() { 
-    return this.dataSource.data.length === 0; 
-  }
-
   ngOnInit(): void {
-    this.cart$.subscribe(items => this.dataSource.data = items);
   }
 
   checkOut(): void {
